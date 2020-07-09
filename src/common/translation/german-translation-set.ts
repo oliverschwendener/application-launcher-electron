@@ -353,4 +353,8 @@ export const germanTranslationSet: TranslationSet = {
 
     controlPanel: "Systemsteuerung",
     controlPanelSettingsDescription: "Dieses Plugin erlaubt es dir, Elemente der Systemsteuerung schnell zu finden.",
+
+    reminder: "Erinnerung",
+    reminderPrefix: "Präfix",
+    reminderSettingsDescription: "Mit diesem Plugin können Sie Erinnerungen festlegen",
 };

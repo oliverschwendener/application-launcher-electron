@@ -3,3 +3,6 @@
 declare module "simple-plist" {
     export function readFile(filePath: string, callback: (err: string, data: any) => void): void;
 }
+
+declare module "chrono-node";
+declare module "node-schedule";

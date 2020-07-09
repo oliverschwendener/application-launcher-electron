@@ -349,4 +349,8 @@ export interface TranslationSet {
 
     controlPanel: string;
     controlPanelSettingsDescription: string;
+
+    reminder: string;
+    reminderPrefix: string;
+    reminderSettingsDescription: string;
 }

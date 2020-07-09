@@ -473,7 +473,7 @@ function mainWindowNeedsToBeTransparent(userConfigOptions: UserConfigOptions): b
         return true;
     }
 
-    return userConfigOptions.appearanceOptions.allowTransparentBackground === true;
+    return userConfigOptions.appearanceOptions.allowTransparentBackground  === true;
 }
 
 function getMainWindowBackgroundColor(userConfigOptions: UserConfigOptions): string {
@@ -483,7 +483,7 @@ function getMainWindowBackgroundColor(userConfigOptions: UserConfigOptions): str
         return transparent;
     }
 
-    return userConfigOptions.appearanceOptions.allowTransparentBackground === true
+    return userConfigOptions.appearanceOptions.allowTransparentBackground  === true
         ? transparent
         : toHex(userConfigOptions.colorThemeOptions.searchResultsBackgroundColor, "#FFFFFF");
 }
@@ -770,6 +770,7 @@ app.on("ready", () => {
         quitApp();
     }
 });
+app.setAppUserModelId("ueli.com");
 
 app.on("window-all-closed", quitApp);
 app.on("quit", app.quit);

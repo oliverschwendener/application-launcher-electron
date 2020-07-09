@@ -51,7 +51,8 @@ import { GoogleChromeBookmarkRepository } from "../plugins/browser-bookmarks-plu
 import { ControlPanelPlugin } from "../plugins/control-panel-plugin/control-panel-plugin";
 import { getAllUwpApps } from "../plugins/uwp-plugin/uwp-apps-retriever";
 import { getGoogleDictionaryDefinitions } from "../plugins/dictionary-plugin/google-dictionary-definition-retriever";
-import { everythingSearcher } from "../plugins/everything-plugin/everything-searcher";
+import {ReminderPlugin} from "../plugins/reminder-plugin/reminder-plugin";
+import {everythingSearcher} from "../plugins/everything-plugin/everything-searcher";
 import { mdfindSearcher } from "../plugins/mdfind-plugin/mdfind-searcher";
 import { OperatingSystem, OperatingSystemVersion } from "../../common/operating-system";
 import { BraveBookmarkRepository } from "../plugins/browser-bookmarks-plugin/brave-bookmark-repository";
@@ -160,6 +161,7 @@ export function getProductionSearchEngine(
         new UrlPlugin(config.urlOptions, translationSet, urlExecutor),
         new EmailPlugin(config.emailOptions, translationSet, urlExecutor),
         new CurrencyConverterPlugin(config.currencyConverterOptions, translationSet, electronClipboardCopier),
+        new ReminderPlugin(config.reminderOptions, translationSet,),
         new CommandlinePlugin(config.commandlineOptions, translationSet, commandlineExecutor, logger),
         new ColorConverterPlugin(config.colorConverterOptions, electronClipboardCopier),
         new DictionaryPlugin(config.dictionaryOptions, electronClipboardCopier, getGoogleDictionaryDefinitions),

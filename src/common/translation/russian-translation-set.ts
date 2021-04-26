@@ -102,6 +102,11 @@ export const russianTranslationSet: TranslationSet = {
     hotkeyModifierShift: "Shift",
     hotkeyModifierSuper: "Super",
 
+    mouseSupport: "Mouse support",
+    mouseSupportDoubleClick: "Double click",
+    mouseSupportSingleClick: "Single click",
+    mouseSupportDisabled: "Disabled",
+
     appearanceSettings: "Внешний вид",
     appearanceSettingsWindowWidth: "Ширина окна (в пикселях)",
     appearanceSettingsMaxSearchResultsPerPage: "Максимальное кол-во результатов на страницу",

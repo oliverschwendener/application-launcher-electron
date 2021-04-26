@@ -102,6 +102,11 @@ export const spanishTranslationSet: TranslationSet = {
     hotkeyModifierShift: "Mayúsculas",
     hotkeyModifierSuper: "Super",
 
+    mouseSupport: "Mouse support",
+    mouseSupportDoubleClick: "Double click",
+    mouseSupportSingleClick: "Single click",
+    mouseSupportDisabled: "Disabled",
+
     appearanceSettings: "Apariencia",
     appearanceSettingsWindowWidth: "Ancho de la ventana (en píxeles)",
     appearanceSettingsMaxSearchResultsPerPage: "Núm max de resultados por página",

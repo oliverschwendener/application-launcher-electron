@@ -99,6 +99,11 @@ export interface TranslationSet {
     hotkeyModifierShift: string;
     hotkeyModifierSuper: string;
 
+    mouseSupport: string,
+    mouseSupportDoubleClick: string,
+    mouseSupportSingleClick: string,
+    mouseSupportDisabled: string,
+
     appearanceSettings: string;
     appearanceSettingsWindowWidth: string;
     appearanceSettingsMaxSearchResultsPerPage: string;

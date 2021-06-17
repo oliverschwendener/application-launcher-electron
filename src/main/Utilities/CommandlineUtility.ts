@@ -14,4 +14,8 @@ export class CommandlineUtility {
             });
         });
     }
+
+    public static async executeCommand(command: string): Promise<void> {
+        await this.executeCommandWithOutput(command);
+    }
 }

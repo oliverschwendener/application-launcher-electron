@@ -1,7 +1,11 @@
-import { DummySearchResultItemIcon } from "../../../common/SearchResult/DummySearchResultItemIcon";
+import { createHash } from "crypto";
+import { basename, extname, join } from "path";
+import { LocalFilePathSearchResultItemIcon } from "../../../common/SearchResult/LocalFilePathSearchResultItemIcon";
 import { ApplicationRuntimeInformation } from "../../ApplicationRuntimeInformation";
 import { SearchPlugin } from "../SearchPlugin";
 import { MacOsApplication } from "./MacOsApplication";
+import { app } from "electron";
+import { FileSystemUtility } from "../../Utilities/FileSystemUtility";
 
 export class MacOsApplicationSearchPlugin extends SearchPlugin<Record<string, unknown>> {
     public readonly pluginId = "MacOsApplicationSearchPlugin";
@@ -28,8 +32,50 @@ export class MacOsApplicationSearchPlugin extends SearchPlugin<Record<string, un
 
     public async rescan(): Promise<void> {
         const filePaths = await this.macOsApplicationFileRetriever();
-        this.applications = filePaths.map(
-            (filePath) => new MacOsApplication(filePath, new DummySearchResultItemIcon("hello"))
-        );
+        await this.generateMacAppIcons(filePaths);
+
+        this.applications = filePaths.map((filePath) => {
+            const icon = new LocalFilePathSearchResultItemIcon(this.getApplicationIconFilePath(filePath));
+            return new MacOsApplication(filePath, icon);
+        });
+    }
+
+    private async generateMacAppIcons(filePaths: string[]): Promise<void> {
+        const begin = Date.now();
+
+        try {
+            await Promise.all(filePaths.map((filePath) => this.generateMacAppIcon(filePath)));
+        } catch (error) {
+            console.log(`Failed to generate icon for one or more applications. Reason: ${error}`);
+        }
+
+        console.log(`Done in ${Date.now() - begin}ms`);
+    }
+
+    private async generateMacAppIcon(filePath: string): Promise<void> {
+        const outPngFilePath = this.getApplicationIconFilePath(filePath);
+        const fileExists = await FileSystemUtility.pathExists(outPngFilePath);
+
+        if (fileExists) {
+            return;
+        }
+
+        try {
+            const image = await app.getFileIcon(filePath);
+            await FileSystemUtility.writePng(image.toPNG(), outPngFilePath);
+        } catch (error) {
+            console.log(`Failed to generate icon for "${filePath}. Reason: ${error}"`);
+        }
+    }
+
+    private getApplicationIconFilePath(applicationFilePath: string): string {
+        const hash = createHash("md5").update(`${applicationFilePath}`).digest("hex");
+
+        const fileName = `${basename(applicationFilePath)
+            .replace(extname(applicationFilePath), "")
+            .toLowerCase()
+            .replace(/\s/g, "-")}-${hash}`;
+
+        return `${join(this.getTemporaryFolderPath(), fileName)}.png`;
     }
 }

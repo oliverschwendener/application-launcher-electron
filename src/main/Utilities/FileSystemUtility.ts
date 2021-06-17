@@ -40,6 +40,10 @@ export class FileSystemUtility {
         });
     }
 
+    public static writePng(buffer: Buffer, filePath: string): Promise<void> {
+        return writeFile(filePath, buffer);
+    }
+
     private static readFile(filePath: string): Promise<Buffer> {
         return new Promise((resolve, reject) => {
             readFile(filePath, (error, data) => {

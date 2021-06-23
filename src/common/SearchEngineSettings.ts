@@ -1,3 +1,3 @@
 export interface SearchEngineSettings {
-    threshold?: number;
+    threshold: number;
 }

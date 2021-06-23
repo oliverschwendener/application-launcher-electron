@@ -3,5 +3,4 @@ export enum IpcInvokeCommand {
     Execute = "Execute",
     OpenLocation = "OpenLocation",
     ClearCaches = "ClearCaches",
-    GetSettings = "GetSettings",
 }

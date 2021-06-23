@@ -6,10 +6,14 @@ import { TimeUtility } from "../Utilities/TimeUtility";
 import { DummySearchable } from "./DummySearchable";
 import { Searchable } from "./Searchable";
 import { SearchEngine } from "./SearchEngine";
+import { SearchEngineSettings } from "../../common/SearchEngineSettings";
 
 describe(SearchEngine, () => {
     const tempFolderPath = join(__dirname, "temp");
     const searchEngineInitializationDuration = 150;
+    const searchEngineSettings: SearchEngineSettings = {
+        threshold: 0.4,
+    };
 
     beforeEach(async () => await FileSystemUtility.createFolderIfDoesntExist(tempFolderPath));
     afterEach(async () => await FileSystemUtility.deleteFolderRecursively(tempFolderPath));
@@ -17,7 +21,7 @@ describe(SearchEngine, () => {
     it("should create plugin temp folders and trigger a rescan on instantiation", async () => {
         const onRescan = jest.fn(() => Promise.resolve());
         const dummySearchPlugin = new DummySearchPlugin(tempFolderPath, undefined, onRescan, undefined);
-        new SearchEngine({}, [dummySearchPlugin]);
+        new SearchEngine(searchEngineSettings, [dummySearchPlugin]);
         await TimeUtility.wait(searchEngineInitializationDuration);
         const pluginFolderExists = await FileSystemUtility.pathExists(dummySearchPlugin.getTemporaryFolderPath());
         expect(pluginFolderExists).toBe(true);
@@ -34,7 +38,9 @@ describe(SearchEngine, () => {
 
         it("should return an empty array if search engine is not initialized yet", async () => {
             const onGetAllSearchables = jest.fn(() => searchables);
-            const searchEngine = new SearchEngine({}, [new DummySearchPlugin(tempFolderPath, onGetAllSearchables)]);
+            const searchEngine = new SearchEngine(searchEngineSettings, [
+                new DummySearchPlugin(tempFolderPath, onGetAllSearchables),
+            ]);
             const actual = searchEngine.search("item");
             expect(actual.length).toBe(0);
             expect(searchEngine.isInitialized()).toBe(false);
@@ -44,7 +50,9 @@ describe(SearchEngine, () => {
 
         it("should return an empty array if the search term is an empty string", async () => {
             const onGetAllSearchables = jest.fn(() => searchables);
-            const searchEngine = new SearchEngine({}, [new DummySearchPlugin(tempFolderPath, onGetAllSearchables)]);
+            const searchEngine = new SearchEngine(searchEngineSettings, [
+                new DummySearchPlugin(tempFolderPath, onGetAllSearchables),
+            ]);
             await TimeUtility.wait(searchEngineInitializationDuration);
             const actual = searchEngine.search("");
             expect(onGetAllSearchables.mock.calls.length).toBe(0);
@@ -53,7 +61,9 @@ describe(SearchEngine, () => {
 
         it("should return all items that match the search term", async () => {
             const onGetAllSearchables = jest.fn(() => searchables);
-            const searchEngine = new SearchEngine({}, [new DummySearchPlugin(tempFolderPath, onGetAllSearchables)]);
+            const searchEngine = new SearchEngine(searchEngineSettings, [
+                new DummySearchPlugin(tempFolderPath, onGetAllSearchables),
+            ]);
             await TimeUtility.wait(searchEngineInitializationDuration);
             const actual = searchEngine.search("Search Result Item");
             expect(actual).toEqual(searchables.map((searchable) => searchable.toSearchResultItem()));
@@ -62,7 +72,9 @@ describe(SearchEngine, () => {
 
         it("should be case insensitive", async () => {
             const onGetAllSearchables = jest.fn(() => searchables);
-            const searchEngine = new SearchEngine({}, [new DummySearchPlugin(tempFolderPath, onGetAllSearchables)]);
+            const searchEngine = new SearchEngine(searchEngineSettings, [
+                new DummySearchPlugin(tempFolderPath, onGetAllSearchables),
+            ]);
             await TimeUtility.wait(searchEngineInitializationDuration);
             const actual = searchEngine.search("search result item");
             expect(actual).toEqual(searchables.map((searchable) => searchable.toSearchResultItem()));
@@ -71,7 +83,9 @@ describe(SearchEngine, () => {
 
         it("should return an empty array if the search term does not match any of the items", async () => {
             const onGetAllSearchables = jest.fn(() => searchables);
-            const searchEngine = new SearchEngine({}, [new DummySearchPlugin(tempFolderPath, onGetAllSearchables)]);
+            const searchEngine = new SearchEngine(searchEngineSettings, [
+                new DummySearchPlugin(tempFolderPath, onGetAllSearchables),
+            ]);
             await TimeUtility.wait(searchEngineInitializationDuration);
             const actual = searchEngine.search("whatever");
             expect(actual).toEqual([]);

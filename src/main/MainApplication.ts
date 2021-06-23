@@ -1,4 +1,4 @@
-import { App, GlobalShortcut, IpcMain } from "electron";
+import { App, GlobalShortcut, IpcMain, IpcMainEvent } from "electron";
 import { IpcMainInvokeEvent } from "electron/main";
 import { IpcChannel } from "../common/IpcChannel";
 import { IpcInvokeCommand } from "../common/IpcInvokeCommand";
@@ -8,6 +8,7 @@ import { CommandlineSwitchConfiguration } from "./CommandlineSwitchConfiguration
 import { ExecutionService } from "./Core/ExecutionService";
 import { LocationOpeningService } from "./Core/LocationOpeningService";
 import { SearchEngine } from "./Core/SearchEngine";
+import { SettingsManager } from "./SettingsManager";
 import { TrayIconEvent } from "./TrayIconEvent";
 import { TrayIconManager } from "./TrayIconManager";
 import { UeliCommandEvent } from "./UeliCommandEvent";
@@ -23,7 +24,8 @@ export class MainApplication {
         private readonly operatingSystem: OperatingSystem,
         private readonly searchEngine: SearchEngine,
         private readonly executionService: ExecutionService,
-        private readonly locationOpeningService: LocationOpeningService
+        private readonly locationOpeningService: LocationOpeningService,
+        private readonly settingsManager: SettingsManager
     ) {}
 
     public start(): void {
@@ -96,7 +98,6 @@ export class MainApplication {
                 }
 
                 this.windowManager.hideMainWindow();
-
                 await this.executionService.execute(args[0]);
             }
         );
@@ -109,14 +110,11 @@ export class MainApplication {
                 }
 
                 this.windowManager.hideMainWindow();
-
                 return this.locationOpeningService.openLocation(args[0]);
             }
         );
 
-        this.ipcMain.handle(IpcInvokeCommand.ClearCaches, () => {
-            return this.clearCaches();
-        });
+        this.ipcMain.handle(IpcInvokeCommand.ClearCaches, () => this.clearCaches());
 
         this.ipcMain.on(IpcChannel.EscapePressed, () => this.windowManager.hideMainWindow());
 
@@ -126,6 +124,11 @@ export class MainApplication {
 
         this.ipcMain.on(IpcChannel.UeliCommandEvent, (ipcMainEvent, ueliCommandEvent: UeliCommandEvent) =>
             this.handleUeliCommandEvent(ueliCommandEvent)
+        );
+
+        this.ipcMain.on(
+            IpcChannel.GetSettings,
+            (event: IpcMainEvent) => (event.returnValue = this.settingsManager.getSettings())
         );
     }
 

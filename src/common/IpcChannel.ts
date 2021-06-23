@@ -3,4 +3,5 @@ export enum IpcChannel {
     MainWindowShown = "MainWindowShown",
     TrayIconEvent = "TrayIconEvent",
     UeliCommandEvent = "UeliCommandEvent",
+    GetSettings = "GetSettings",
 }

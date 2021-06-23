@@ -14,6 +14,9 @@ import { UeliCommandExecutor } from "./Executors/UeliCommandExecutor";
 import { OperatingSystem } from "../common/OperatingSystem/OperatingSystem";
 import { WindowsPluginRepository } from "./PluginRepository/WindowsPluginRepository";
 import { MacOsPluginRepository } from "./PluginRepository/MacOsPluginRepository";
+import { SettingsManager } from "./SettingsManager";
+import { join } from "path";
+import { defaultSettings } from "./DefaultSettings";
 
 const operatingSystem = OperatingSystemHelper.getOperatingSystem(platform());
 
@@ -24,6 +27,11 @@ const applicationRuntimeInformation: ApplicationRuntimeInformation = {
     userHomePath: app.getPath("home"),
 };
 
+const settingsManager = new SettingsManager(
+    join(applicationRuntimeInformation.userDataPath, "ueli9.settings.json"),
+    defaultSettings
+);
+
 const windowManager = new WindowManager();
 const trayIconManager = new TrayIconManager(operatingSystem, ipcMain);
 
@@ -32,7 +40,10 @@ const pluginRepository =
         ? new WindowsPluginRepository(applicationRuntimeInformation)
         : new MacOsPluginRepository(applicationRuntimeInformation);
 
-const searchEngine = new SearchEngine({}, pluginRepository.getAllPlugins());
+const searchEngine = new SearchEngine(
+    settingsManager.getSettings().searchEngineSettings,
+    pluginRepository.getAllPlugins()
+);
 
 const openFilePath = async (filePath: string): Promise<void> => {
     const errorMessage = await shell.openPath(filePath);
@@ -58,5 +69,6 @@ new MainApplication(
     operatingSystem,
     searchEngine,
     executionService,
-    locationOpeningService
+    locationOpeningService,
+    settingsManager
 ).start();

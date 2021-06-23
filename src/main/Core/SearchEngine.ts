@@ -2,16 +2,12 @@ import Fuse from "fuse.js";
 import { SearchResultItem } from "../../common/SearchResult/SearchResultItem";
 import { SearchPlugin } from "../Plugins/SearchPlugin";
 import { Searchable } from "./Searchable";
-import { SearchEngineSettings } from "./SearchEngineSettings";
+import { SearchEngineSettings } from "../../common/SearchEngineSettings";
 import { SearchEngineRescanError } from "./SearchEngineRescanError";
 
 export class SearchEngine {
     private initialized = false;
     private readonly rescanIntervalInSeconds = 60;
-    private readonly defaultSearchEngineSettings: Fuse.IFuseOptions<SearchResultItem> = {
-        threshold: 0.4,
-        keys: ["name"],
-    };
 
     constructor(
         private searchEngineSettings: SearchEngineSettings,
@@ -31,7 +27,7 @@ export class SearchEngine {
 
         return new Fuse(
             this.getAllSearchables().map((searchable) => searchable.toSearchResultItem()),
-            Object.assign(this.defaultSearchEngineSettings, this.searchEngineSettings)
+            { threshold: this.searchEngineSettings.threshold, keys: ["name"] }
         )
             .search(searchTerm)
             .map((fuseSearchResult) => fuseSearchResult.item);
@@ -62,6 +58,10 @@ export class SearchEngine {
         } catch (error) {
             throw new Error(`SearchEngine failed to clear caches. Reason: ${error}`);
         }
+    }
+
+    public updateSearchEngineSettings(updatedSearchEngineSettings: SearchEngineSettings): void {
+        this.searchEngineSettings = updatedSearchEngineSettings;
     }
 
     private async initialize(): Promise<void> {

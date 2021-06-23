@@ -1,3 +1,4 @@
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { emptyDir, rmdir, ensureDir, pathExists, readdir, readFile, writeFile } from "fs-extra";
 import { join } from "path";
 
@@ -32,6 +33,10 @@ export class FileSystemUtility {
         return JSON.parse(fileContent.toString());
     }
 
+    public static readJsonFileSync<T>(filePath: string): T {
+        return JSON.parse(this.readFileSync(filePath).toString());
+    }
+
     public static writeJsonFile<T>(data: T, filePath: string): Promise<void> {
         return new Promise((resolve, reject) => {
             writeFile(filePath, JSON.stringify(data), (error) => {
@@ -40,8 +45,16 @@ export class FileSystemUtility {
         });
     }
 
+    public static writeJsonFileSync<T>(data: T, filePath: string): void {
+        return writeFileSync(filePath, JSON.stringify(data));
+    }
+
     public static writePng(buffer: Buffer, filePath: string): Promise<void> {
         return writeFile(filePath, buffer);
+    }
+
+    public static existsSync(filePath: string): boolean {
+        return existsSync(filePath);
     }
 
     private static readFile(filePath: string): Promise<Buffer> {
@@ -50,5 +63,9 @@ export class FileSystemUtility {
                 error ? reject(error) : resolve(data);
             });
         });
+    }
+
+    private static readFileSync(filePath: string): Buffer {
+        return readFileSync(filePath);
     }
 }

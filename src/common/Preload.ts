@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 import { Bridge } from "./Bridge";
 import { IpcChannel } from "./IpcChannel";
+import { IpcInvokeCommand } from "./IpcInvokeCommand";
 
 const bridge: Bridge = {
     ipcRenderer: {
@@ -17,8 +18,8 @@ const bridge: Bridge = {
             listener: (event: IpcRendererEvent, ...args: ArgumentType[]) => void
         ) => ipcRenderer.once(channel.toString(), listener),
 
-        invoke: <ArgumentType, ReturnType>(channel: IpcChannel, ...arg: ArgumentType[]) => {
-            return ipcRenderer.invoke(channel, arg) as Promise<ReturnType>;
+        invoke: <ArgumentType, ReturnType>(command: IpcInvokeCommand, ...arg: ArgumentType[]) => {
+            return ipcRenderer.invoke(command, arg) as Promise<ReturnType>;
         },
     },
 };

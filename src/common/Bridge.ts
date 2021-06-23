@@ -1,5 +1,6 @@
 import { IpcRendererEvent } from "electron";
 import { IpcChannel } from "./IpcChannel";
+import { IpcInvokeCommand } from "./IpcInvokeCommand";
 
 export interface IpcRendererBridge {
     readonly send: <ArgumentType>(channel: IpcChannel, ...arg: ArgumentType[]) => void;
@@ -16,7 +17,10 @@ export interface IpcRendererBridge {
         listener: (event: IpcRendererEvent, ...arg: ArgumentType[]) => void
     ) => void;
 
-    readonly invoke: <ArgumentType, ReturnType>(channel: IpcChannel, ...arg: ArgumentType[]) => Promise<ReturnType>;
+    readonly invoke: <ArgumentType, ReturnType>(
+        command: IpcInvokeCommand,
+        ...arg: ArgumentType[]
+    ) => Promise<ReturnType>;
 }
 
 export interface Bridge {

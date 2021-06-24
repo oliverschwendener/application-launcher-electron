@@ -11,12 +11,10 @@ import { SearchEngineSettings } from "../../common/SearchEngineSettings";
 describe(SearchEngine, () => {
     const tempFolderPath = join(__dirname, "temp");
     const searchEngineInitializationDuration = 150;
-    const searchEngineSettings: SearchEngineSettings = {
-        threshold: 0.4,
-    };
+    const searchEngineSettings: SearchEngineSettings = { threshold: 0.4 };
 
-    beforeEach(async () => await FileSystemUtility.createFolderIfDoesntExist(tempFolderPath));
-    afterEach(async () => await FileSystemUtility.deleteFolderRecursively(tempFolderPath));
+    beforeEach(async () => FileSystemUtility.createFolderIfDoesntExist(tempFolderPath));
+    afterEach(async () => FileSystemUtility.deleteFolderRecursively(tempFolderPath));
 
     it("should create plugin temp folders and trigger a rescan on instantiation", async () => {
         const onRescan = jest.fn(() => Promise.resolve());

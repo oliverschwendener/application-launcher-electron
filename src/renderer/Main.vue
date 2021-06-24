@@ -21,7 +21,6 @@ import { vueEventEmitter } from "./VueEventEmitter";
 import { VueEvent } from "./VueEvent";
 import { SearchResultItem } from "../common/SearchResult/SearchResultItem";
 import { IpcChannel } from "../common/IpcChannel";
-import { IpcInvokeCommand } from "../common/IpcInvokeCommand";
 
 import "./Styles/variables.css";
 import "./Styles/shared.css";
@@ -69,7 +68,7 @@ export default defineComponent({
         async onSearchTermChanged(searchTerm: string): Promise<void> {
             try {
                 this.searchResultItems = await this.Bridge.ipcRenderer.invoke<string, SearchResultItem[]>(
-                    IpcInvokeCommand.Search,
+                    IpcChannel.Search,
                     searchTerm
                 );
             } catch (error) {
@@ -79,7 +78,7 @@ export default defineComponent({
 
         async onExecutionRequested(searchResultItem: SearchResultItem): Promise<void> {
             try {
-                await this.Bridge.ipcRenderer.invoke(IpcInvokeCommand.Execute, searchResultItem);
+                await this.Bridge.ipcRenderer.invoke(IpcChannel.Execute, searchResultItem);
             } catch (error) {
                 this.handleError(error);
             }
@@ -87,7 +86,7 @@ export default defineComponent({
 
         async onOpenLocationRequested(searchResultItem: SearchResultItem): Promise<void> {
             try {
-                await this.Bridge.ipcRenderer.invoke(IpcInvokeCommand.OpenLocation, searchResultItem);
+                await this.Bridge.ipcRenderer.invoke(IpcChannel.OpenLocation, searchResultItem);
             } catch (error) {
                 this.handleError(error);
             }

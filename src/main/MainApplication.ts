@@ -1,9 +1,9 @@
 import { App, GlobalShortcut, IpcMain, IpcMainEvent } from "electron";
 import { IpcMainInvokeEvent } from "electron/main";
 import { IpcChannel } from "../common/IpcChannel";
-import { IpcInvokeCommand } from "../common/IpcInvokeCommand";
 import { OperatingSystem } from "../common/OperatingSystem/OperatingSystem";
 import { SearchResultItem } from "../common/SearchResult/SearchResultItem";
+import { Settings } from "../common/Settings";
 import { CommandlineSwitchConfiguration } from "./CommandlineSwitchConfiguration";
 import { ExecutionService } from "./Core/ExecutionService";
 import { LocationOpeningService } from "./Core/LocationOpeningService";
@@ -78,7 +78,7 @@ export class MainApplication {
     }
 
     private registerIpcEventListeners(): void {
-        this.ipcMain.handle(IpcInvokeCommand.Search, (event: IpcMainInvokeEvent, args: string[]): Promise<
+        this.ipcMain.handle(IpcChannel.Search, (event: IpcMainInvokeEvent, args: string[]): Promise<
             SearchResultItem[]
         > => {
             if (args.length === 0) {
@@ -89,7 +89,7 @@ export class MainApplication {
         });
 
         this.ipcMain.handle(
-            IpcInvokeCommand.Execute,
+            IpcChannel.Execute,
             async (event: IpcMainInvokeEvent, args: SearchResultItem[]): Promise<void> => {
                 if (args.length === 0) {
                     return Promise.reject(
@@ -103,7 +103,7 @@ export class MainApplication {
         );
 
         this.ipcMain.handle(
-            IpcInvokeCommand.OpenLocation,
+            IpcChannel.OpenLocation,
             (event: IpcMainInvokeEvent, args: SearchResultItem[]): Promise<void> => {
                 if (args.length === 0) {
                     return Promise.reject("Unable to open location. Reason: no search result items given.");
@@ -114,7 +114,19 @@ export class MainApplication {
             }
         );
 
-        this.ipcMain.handle(IpcInvokeCommand.ClearCaches, () => this.clearCaches());
+        this.ipcMain.handle(IpcChannel.ClearCaches, () => this.clearCaches());
+
+        this.ipcMain.handle(
+            IpcChannel.UpdateSettings,
+            (ipcMainEvent: IpcMainInvokeEvent, args: Settings[]): Promise<void> => {
+                if (args.length === 0) {
+                    return Promise.reject("Unable to update settings. Reason: no settings given.");
+                }
+
+                const updatedSettings = args[0];
+                return this.settingsManager.updateSettings(updatedSettings);
+            }
+        );
 
         this.ipcMain.on(IpcChannel.EscapePressed, () => this.windowManager.hideMainWindow());
 

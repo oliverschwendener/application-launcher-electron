@@ -1,4 +1,5 @@
 import { Settings } from "../common/Settings";
+import { SettingsFactory } from "./SettingsFactory";
 import { FileSystemUtility } from "./Utilities/FileSystemUtility";
 
 export class SettingsManager {
@@ -24,7 +25,10 @@ export class SettingsManager {
 
     private readSettingsFromFileSystem(): Settings {
         try {
-            return FileSystemUtility.readJsonFileSync(this.userSettingsFilePath);
+            return SettingsFactory.createFromUserSettings(
+                FileSystemUtility.readJsonFileSync<Record<string, unknown>>(this.userSettingsFilePath),
+                this.defaultSettings
+            );
         } catch (error) {
             console.log(
                 `Default settings will be applied. Failed to read user settings from settings file. Reason: ${error}`

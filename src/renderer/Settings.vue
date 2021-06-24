@@ -6,12 +6,16 @@
         <div class="body-container">
             <router-view> </router-view>
         </div>
+        <div class="notification-container">
+            <Notification />
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import Sidebar from "./Components/SettingsWindow/Sidebar.vue";
+import Notification from "./Components/SettingsWindow/Notification.vue";
 
 import "./Styles/variables.css";
 import "./Styles/shared.css";
@@ -19,6 +23,7 @@ import "./Styles/shared.css";
 export default defineComponent({
     components: {
         Sidebar,
+        Notification,
     },
 
     methods: {
@@ -52,5 +57,11 @@ export default defineComponent({
 
 .body-container {
     width: 100%;
+}
+
+.notification-container {
+    position: fixed;
+    bottom: var(--ueli-spacing-4x);
+    right: var(--ueli-spacing-4x);
 }
 </style>

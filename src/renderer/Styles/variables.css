@@ -12,6 +12,9 @@
 
     --ueli-white: #fafafa;
     --ueli-blue: #2196f3;
+    --ueli-green: #00c853;
+    --ueli-red: #ff3d00;
+    --ueli-orange: #ffab00;
 
     --ueli-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -30,8 +33,10 @@
     --ueli-spacing-4x: 16px;
 
     --ueli-border: 1px solid var(--ueli-black-800);
+    --ueli-corners: 2px;
 
-    --ueli-transition: all 100ms ease-in-out;
+    --ueli-transition-speed: 150ms;
+    --ueli-transition: all var(--ueli-transition-speed) ease-in-out;
 
     --ueli-scrollbar-size: 8px;
     --ueli-scrollbar-background-color: var(--ueli--black-800);

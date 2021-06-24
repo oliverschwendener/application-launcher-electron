@@ -1,7 +1,8 @@
 export enum VueEvent {
-    GlobalKeyDown = "GlobalKeyDown",
-    UserInputEnterPressed = "UserInputEnterPressed",
-    UserInputArrowKeyPressed = "UserInputArrowKeyPressed",
     EscapePressed = "EscapePressed",
+    GlobalKeyDown = "GlobalKeyDown",
     MainWindowShown = "MainWindowShown",
+    Notification = "Notification",
+    UserInputArrowKeyPressed = "UserInputArrowKeyPressed",
+    UserInputEnterPressed = "UserInputEnterPressed",
 }

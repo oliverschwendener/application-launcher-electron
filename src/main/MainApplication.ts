@@ -123,8 +123,7 @@ export class MainApplication {
                     return Promise.reject("Unable to update settings. Reason: no settings given.");
                 }
 
-                const updatedSettings = args[0];
-                return this.settingsManager.updateSettings(updatedSettings);
+                return this.updateSettings(args[0]);
             }
         );
 
@@ -196,5 +195,10 @@ export class MainApplication {
             default:
                 throw new Error(`Failed to handle ueli command event ${event}. Reason: no handler found`);
         }
+    }
+
+    private updateSettings(updatedSettings: Settings): Promise<void> {
+        this.searchEngine.updateSettings(updatedSettings.searchEngineSettings);
+        return this.settingsManager.updateSettings(updatedSettings);
     }
 }

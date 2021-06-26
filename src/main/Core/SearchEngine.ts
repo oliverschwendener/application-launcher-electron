@@ -9,10 +9,7 @@ export class SearchEngine {
     private initialized = false;
     private readonly rescanIntervalInSeconds = 60;
 
-    constructor(
-        private searchEngineSettings: SearchEngineSettings,
-        private readonly searchPlugins: SearchPlugin<unknown>[]
-    ) {
+    constructor(private settings: SearchEngineSettings, private readonly searchPlugins: SearchPlugin<unknown>[]) {
         this.initialize().finally(() => (this.initialized = true));
     }
 
@@ -27,7 +24,7 @@ export class SearchEngine {
 
         return new Fuse(
             this.getAllSearchables().map((searchable) => searchable.toSearchResultItem()),
-            { threshold: this.searchEngineSettings.threshold, keys: ["name"] }
+            { threshold: this.settings.threshold, keys: ["name"] }
         )
             .search(searchTerm)
             .map((fuseSearchResult) => fuseSearchResult.item);
@@ -60,8 +57,8 @@ export class SearchEngine {
         }
     }
 
-    public updateSearchEngineSettings(updatedSearchEngineSettings: SearchEngineSettings): void {
-        this.searchEngineSettings = updatedSearchEngineSettings;
+    public updateSettings(updatedSettings: SearchEngineSettings): void {
+        this.settings = updatedSettings;
     }
 
     private async initialize(): Promise<void> {

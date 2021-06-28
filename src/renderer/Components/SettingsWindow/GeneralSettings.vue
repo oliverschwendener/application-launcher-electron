@@ -1,8 +1,14 @@
 <template>
-    <div>General settings</div>
+    <SettingList title="General settings"></SettingList>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-export default defineComponent({});
+import SettingList from "../DesignSystem/SettingList.vue";
+
+export default defineComponent({
+    components: {
+        SettingList,
+    },
+});
 </script>

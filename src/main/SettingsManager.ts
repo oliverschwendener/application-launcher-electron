@@ -1,3 +1,4 @@
+import { Logger } from "../common/Logger/Logger";
 import { Settings } from "../common/Settings";
 import { SettingsFactory } from "./SettingsFactory";
 import { FileSystemUtility } from "./Utilities/FileSystemUtility";
@@ -5,7 +6,11 @@ import { FileSystemUtility } from "./Utilities/FileSystemUtility";
 export class SettingsManager {
     private settings: Settings;
 
-    public constructor(private readonly userSettingsFilePath: string, private readonly defaultSettings: Settings) {
+    public constructor(
+        private readonly userSettingsFilePath: string,
+        private readonly defaultSettings: Settings,
+        private readonly logger: Logger
+    ) {
         if (FileSystemUtility.existsSync(this.userSettingsFilePath)) {
             this.settings = this.readSettingsFromFileSystem();
         } else {
@@ -30,7 +35,7 @@ export class SettingsManager {
                 this.defaultSettings
             );
         } catch (error) {
-            console.log(
+            this.logger.error(
                 `Default settings will be applied. Failed to read user settings from settings file. Reason: ${error}`
             );
             return this.defaultSettings;

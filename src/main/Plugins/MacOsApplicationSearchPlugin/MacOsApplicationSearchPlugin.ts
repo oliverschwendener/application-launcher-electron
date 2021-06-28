@@ -41,15 +41,7 @@ export class MacOsApplicationSearchPlugin extends SearchPlugin<Record<string, un
     }
 
     private async generateMacAppIcons(filePaths: string[]): Promise<void> {
-        const begin = Date.now();
-
-        try {
-            await Promise.all(filePaths.map((filePath) => this.generateMacAppIcon(filePath)));
-        } catch (error) {
-            console.log(`Failed to generate icon for one or more applications. Reason: ${error}`);
-        }
-
-        console.log(`Done in ${Date.now() - begin}ms`);
+        await Promise.all(filePaths.map((filePath) => this.generateMacAppIcon(filePath)));
     }
 
     private async generateMacAppIcon(filePath: string): Promise<void> {
@@ -60,12 +52,8 @@ export class MacOsApplicationSearchPlugin extends SearchPlugin<Record<string, un
             return;
         }
 
-        try {
-            const image = await app.getFileIcon(filePath);
-            await FileSystemUtility.writePng(image.toPNG(), outPngFilePath);
-        } catch (error) {
-            console.log(`Failed to generate icon for "${filePath}. Reason: ${error}"`);
-        }
+        const image = await app.getFileIcon(filePath);
+        await FileSystemUtility.writePng(image.toPNG(), outPngFilePath);
     }
 
     private getApplicationIconFilePath(applicationFilePath: string): string {

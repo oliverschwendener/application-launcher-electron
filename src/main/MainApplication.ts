@@ -43,6 +43,7 @@ export class MainApplication {
         this.createTrayIcon();
         this.windowManager.createMainWindow();
         this.registerGlobalKeyEventListeners();
+        this.initializeSearchEngine();
     }
 
     private quitApp(): void {
@@ -77,16 +78,21 @@ export class MainApplication {
         this.globalShortcut.register("Alt+Space", () => this.windowManager.toggleMainWindow());
     }
 
-    private registerIpcEventListeners(): void {
-        this.ipcMain.handle(IpcChannel.Search, (event: IpcMainInvokeEvent, args: string[]): Promise<
-            SearchResultItem[]
-        > => {
-            if (args.length === 0) {
-                return Promise.reject("Failed to handle search term. Reason: no search term specified.");
-            }
+    private initializeSearchEngine(): Promise<void> {
+        return this.searchEngine.initialize();
+    }
 
-            return Promise.resolve(this.searchEngine.search(args[0]));
-        });
+    private registerIpcEventListeners(): void {
+        this.ipcMain.handle(
+            IpcChannel.Search,
+            (event: IpcMainInvokeEvent, args: string[]): Promise<SearchResultItem[]> => {
+                if (args.length === 0) {
+                    return Promise.reject("Failed to handle search term. Reason: no search term specified.");
+                }
+
+                return Promise.resolve(this.searchEngine.search(args[0]));
+            }
+        );
 
         this.ipcMain.handle(
             IpcChannel.Execute,

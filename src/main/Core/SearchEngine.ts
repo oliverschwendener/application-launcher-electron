@@ -1,16 +1,27 @@
 import Fuse from "fuse.js";
-import { SearchResultItem } from "../../common/SearchResult/SearchResultItem";
-import { SearchPlugin } from "../Plugins/SearchPlugin";
+import { Logger } from "../../common/Logger/Logger";
 import { Searchable } from "./Searchable";
-import { SearchEngineSettings } from "../../common/SearchEngineSettings";
 import { SearchEngineRescanError } from "./SearchEngineRescanError";
+import { SearchEngineSettings } from "../../common/SearchEngineSettings";
+import { SearchPlugin } from "../Plugins/SearchPlugin";
+import { SearchResultItem } from "../../common/SearchResult/SearchResultItem";
 
 export class SearchEngine {
     private initialized = false;
-    private readonly rescanIntervalInSeconds = 60;
+    private rescanPromise?: Promise<void[]>;
+    private scheduledRescanTimeout?: number | NodeJS.Timeout;
 
-    constructor(private settings: SearchEngineSettings, private readonly searchPlugins: SearchPlugin<unknown>[]) {
-        this.initialize().finally(() => (this.initialized = true));
+    constructor(
+        private settings: SearchEngineSettings,
+        private readonly searchPlugins: SearchPlugin<unknown>[],
+        private readonly logger: Logger
+    ) {}
+
+    public async initialize(): Promise<void> {
+        await this.createPluginTempFolders();
+        await this.createPluginSettingFilesIfNecessary();
+        await this.rescan();
+        this.initialized = true;
     }
 
     public isInitialized(): boolean {
@@ -31,22 +42,39 @@ export class SearchEngine {
     }
 
     public async rescan(): Promise<void> {
-        console.log("Starting rescan...");
+        if (this.rescanIsCurrentlyRunning()) {
+            throw new SearchEngineRescanError("Rescan is currently running.");
+        }
 
-        const rescanIntervalInMilliseconds = this.rescanIntervalInSeconds * 1000;
-        const scheduleNextRescan = () => {
-            console.log(`Scheduled next rescan in ${this.rescanIntervalInSeconds} seconds.`);
-            setTimeout(() => this.rescan(), rescanIntervalInMilliseconds);
-        };
+        this.logger.info("Starting rescan");
 
         try {
-            await Promise.all(this.searchPlugins.map((searchPlugin) => searchPlugin.rescan()));
+            this.rescanPromise = Promise.all(this.searchPlugins.map((searchPlugin) => searchPlugin.rescan()));
+            await this.rescanPromise;
+            this.logger.info(`Sucessfully rescanned`);
         } catch (error) {
             this.handleError(new SearchEngineRescanError(error));
         } finally {
-            console.log("Finished rescan.");
-            scheduleNextRescan();
+            this.rescanPromise = undefined;
+            if (this.settings.automaticRescanIntervalInSeconds) {
+                this.scheduleRescan(this.settings.automaticRescanIntervalInSeconds);
+            }
         }
+    }
+
+    public rescanIsCurrentlyRunning(): boolean {
+        return this.rescanPromise !== undefined;
+    }
+
+    public cancelScheduledRescan(): void {
+        if (this.scheduledRescanTimeout) {
+            clearTimeout(this.scheduledRescanTimeout as number);
+            this.logger.info("Scheduled rescan cancelled");
+        }
+    }
+
+    public hasRescanScheduled(): boolean {
+        return this.scheduledRescanTimeout !== undefined;
     }
 
     public async clearCaches(): Promise<void> {
@@ -58,13 +86,25 @@ export class SearchEngine {
     }
 
     public updateSettings(updatedSettings: SearchEngineSettings): void {
+        if (
+            SearchEngine.rescanOptionChanged(
+                updatedSettings.automaticRescanIntervalInSeconds,
+                this.settings.automaticRescanIntervalInSeconds
+            )
+        ) {
+            if (updatedSettings.automaticRescanIntervalInSeconds) {
+                this.rescan();
+            } else {
+                this.cancelScheduledRescan();
+            }
+        }
+
         this.settings = updatedSettings;
     }
 
-    private async initialize(): Promise<void> {
-        await this.createPluginTempFolders();
-        await this.createPluginSettingFilesIfNecessary();
-        this.rescan();
+    private scheduleRescan(automaticRescanIntervalInSeconds: number): void {
+        this.logger.info(`Scheduled next rescan in ${automaticRescanIntervalInSeconds} seconds`);
+        this.scheduledRescanTimeout = setTimeout(() => this.rescan(), automaticRescanIntervalInSeconds * 1000);
     }
 
     private async createPluginTempFolders(): Promise<void> {
@@ -76,16 +116,16 @@ export class SearchEngine {
     }
 
     private getAllSearchables(): Searchable[] {
-        let result: Searchable[] = [];
-
-        this.searchPlugins.forEach((searchPlugin) => {
-            result = result.concat(searchPlugin.getAllSearchables());
-        });
-
-        return result;
+        return this.searchPlugins
+            .map((searchPlugin) => searchPlugin.getAllSearchables())
+            .reduce((previous, current) => previous.concat(current), []);
     }
 
     private handleError(error: Error): void {
-        console.error(`Handled error: ${error.message}`);
+        this.logger.error(`Handled error: ${error.message}`);
+    }
+
+    private static rescanOptionChanged(newValue: number, currentValue: number): boolean {
+        return newValue !== currentValue;
     }
 }

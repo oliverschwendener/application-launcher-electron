@@ -17,8 +17,10 @@ import { MacOsPluginRepository } from "./PluginRepository/MacOsPluginRepository"
 import { SettingsManager } from "./SettingsManager";
 import { join } from "path";
 import { defaultSettings } from "./DefaultSettings";
+import { ConsoleLogger } from "../common/Logger/ConsoleLogger";
 
 const operatingSystem = OperatingSystemHelper.getOperatingSystem(platform());
+const logger = new ConsoleLogger();
 
 const applicationRuntimeInformation: ApplicationRuntimeInformation = {
     executablePath: app.getPath("exe"),
@@ -29,7 +31,8 @@ const applicationRuntimeInformation: ApplicationRuntimeInformation = {
 
 const settingsManager = new SettingsManager(
     join(applicationRuntimeInformation.userDataPath, "ueli9.settings.json"),
-    defaultSettings
+    defaultSettings,
+    logger
 );
 
 const windowManager = new WindowManager();
@@ -42,7 +45,8 @@ const pluginRepository =
 
 const searchEngine = new SearchEngine(
     settingsManager.getSettings().searchEngineSettings,
-    pluginRepository.getAllPlugins()
+    pluginRepository.getAllPlugins(),
+    logger
 );
 
 const openFilePath = async (filePath: string): Promise<void> => {

@@ -1,10 +1,9 @@
 <template>
-    <div class="search-engine-settings">
-        Search Engine Settings
-        <div class="settings">
-            <div class="setting">
-                <div class="setting-label">Fuzzyness</div>
-                <div class="setting-body">
+    <SettingList title="Search Engine Settings">
+        <template v-slot:settings>
+            <Setting class="setting">
+                <template v-slot:label>Fuzzyness</template>
+                <template v-slot:body>
                     <RangeSlider
                         :min="0"
                         :max="1"
@@ -13,10 +12,20 @@
                         :displayValue="true"
                         @valueChanged="thresholdChanged"
                     />
-                </div>
-            </div>
-        </div>
-    </div>
+                </template>
+            </Setting>
+
+            <Setting class="setting">
+                <template v-slot:label> Automatic rescan interval </template>
+                <template v-slot:body>
+                    <NumberInput
+                        :value="settings.searchEngineSettings.automaticRescanIntervalInSeconds"
+                        @changed="rescanIntervalChanged"
+                    />
+                </template>
+            </Setting>
+        </template>
+    </SettingList>
 </template>
 
 <script lang="ts">
@@ -29,6 +38,9 @@ import { NotificationType } from "../../NotificationType";
 import { VueEvent } from "../../VueEvent";
 import { vueEventEmitter } from "../../VueEventEmitter";
 import RangeSlider from "../DesignSystem/RangeSlider.vue";
+import NumberInput from "../DesignSystem/NumberInput.vue";
+import Setting from "../DesignSystem/Setting.vue";
+import SettingList from "../DesignSystem/SettingList.vue";
 
 interface Data {
     settings: Settings;
@@ -36,7 +48,10 @@ interface Data {
 
 export default defineComponent({
     components: {
+        NumberInput,
         RangeSlider,
+        Setting,
+        SettingList,
     },
 
     data(): Data {
@@ -56,6 +71,16 @@ export default defineComponent({
             }
         },
 
+        async rescanIntervalChanged(interval: number) {
+            this.settings.searchEngineSettings.automaticRescanIntervalInSeconds = interval;
+            try {
+                await this.saveSettings();
+                vueEventEmitter.emit(VueEvent.Notification, this.successfullySavedSettingsNotification());
+            } catch (error) {
+                vueEventEmitter.emit(VueEvent.Notification, this.failedToSaveSettingsNotification(error));
+            }
+        },
+
         successfullySavedSettingsNotification(): NotificationData {
             return {
                 message: "Settings have been updated",
@@ -66,9 +91,9 @@ export default defineComponent({
             };
         },
 
-        failedToSaveSettingsNotification(error: any): NotificationData {
+        failedToSaveSettingsNotification(error: Error): NotificationData {
             return {
-                message: `Failed to save settings. Reason ${error}`,
+                message: `Failed to save settings. Reason ${error.message}`,
                 autoHide: false,
                 type: NotificationType.Danger,
                 showIcon: true,
@@ -86,37 +111,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.search-engine-settings {
-    padding: var(--ueli-spacing-4x);
-    box-sizing: border-box;
-}
-
-.settings {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.setting {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--ueli-spacing-4x);
-    box-sizing: border-box;
-}
-
 .setting:not(:last-child) {
     border-bottom: var(--ueli-border);
-}
-
-.setting-label {
-    flex-shrink: 0;
-    padding-right: var(--ueli-spacing-4x);
-}
-
-.setting-body {
-    flex-grow: 1;
 }
 </style>

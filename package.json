@@ -50,6 +50,7 @@
         "ts-jest": "^27.0.3",
         "ts-loader": "^9.2.3",
         "typescript": "^4.3.4",
+        "ueli-designsystem": "https://github.com/oliverschwendener/ueli-designsystem",
         "vue": "^3.0.11",
         "vue-eslint-parser": "^7.6.0",
         "vue-loader": "^16.2.0",

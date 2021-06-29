@@ -5207,6 +5207,13 @@ typescript@^4.3.4:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.4.tgz#3f85b986945bcf31071decdd96cf8bfa65f9dcbc"
   integrity sha512-uauPG7XZn9F/mo+7MrsRjyvbxFpzemRjKEZXS4AK83oP2KKOJPvb+9cO/gmnv8arWZvhnjVOXz7B49m1l0e9Ew==
 
+"ueli-designsystem@https://github.com/oliverschwendener/ueli-designsystem":
+  version "0.0.0"
+  resolved "https://github.com/oliverschwendener/ueli-designsystem#34d9edf6e3a225d1d2e4b40490a45f2b818ffc68"
+  dependencies:
+    bootstrap-icons "^1.5.0"
+    vue "^3.0.11"
+
 unique-string@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/unique-string/-/unique-string-2.0.0.tgz#39c6451f81afb2749de2b233e3f7c5e8843bd89d"

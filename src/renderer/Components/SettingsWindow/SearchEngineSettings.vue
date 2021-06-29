@@ -4,7 +4,7 @@
             <Setting class="setting">
                 <template v-slot:label>Fuzzyness</template>
                 <template v-slot:body>
-                    <RangeSlider
+                    <SliderInput
                         :min="0"
                         :max="1"
                         :step="0.1"
@@ -37,10 +37,7 @@ import { NotificationData } from "../../NotificationData";
 import { NotificationType } from "../../NotificationType";
 import { VueEvent } from "../../VueEvent";
 import { vueEventEmitter } from "../../VueEventEmitter";
-import RangeSlider from "../DesignSystem/RangeSlider.vue";
-import NumberInput from "../DesignSystem/NumberInput.vue";
-import Setting from "../DesignSystem/Setting.vue";
-import SettingList from "../DesignSystem/SettingList.vue";
+import { NumberInput, SliderInput, Setting, SettingList } from "ueli-designsystem/index";
 
 interface Data {
     settings: Settings;
@@ -49,9 +46,9 @@ interface Data {
 export default defineComponent({
     components: {
         NumberInput,
-        RangeSlider,
         Setting,
         SettingList,
+        SliderInput,
     },
 
     data(): Data {
@@ -87,7 +84,7 @@ export default defineComponent({
                 autoHide: true,
                 autoHideDuration: 2500,
                 type: NotificationType.Success,
-                showIcon: true,
+                icon: "check",
             };
         },
 
@@ -96,7 +93,7 @@ export default defineComponent({
                 message: `Failed to save settings. Reason ${error.message}`,
                 autoHide: false,
                 type: NotificationType.Danger,
-                showIcon: true,
+                icon: "exclamation-triangle-fill",
             };
         },
 

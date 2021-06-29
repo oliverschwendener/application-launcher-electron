@@ -5,5 +5,5 @@ export interface NotificationData {
     autoHide: boolean;
     autoHideDuration?: number;
     type?: NotificationType;
-    showIcon?: boolean;
+    icon?: string;
 }

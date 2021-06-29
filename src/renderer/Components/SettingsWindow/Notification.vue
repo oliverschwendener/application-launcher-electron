@@ -1,34 +1,22 @@
 <template>
     <div class="notifications">
-        <div
-            class="notification"
-            :class="typeClass(notification)"
+        <NotificationComponent
             v-for="(notification, index) in notifications"
             :key="index"
-        >
-            <div class="notification-body">
-                <Icon
-                    v-if="notification.showIcon"
-                    class="notification-icon"
-                    :icon="notificationTypeIcon(notification)"
-                />
-                {{ notification.message }}
-            </div>
-            <div class="notification-actions">
-                <IconButton icon="x" @click="removeNotification(index)" />
-            </div>
-        </div>
+            :message="notification.message"
+            :type="notification.type"
+            :icon="notification.icon"
+            @close="removeNotification(index)"
+        />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { NotificationData } from "../../NotificationData";
-import { NotificationType } from "../../NotificationType";
 import { VueEvent } from "../../VueEvent";
 import { vueEventEmitter } from "../../VueEventEmitter";
-import IconButton from "./IconButton.vue";
-import Icon from "./Icon.vue";
+import { Notification as NotificationComponent } from "ueli-designsystem/index";
 
 interface Data {
     notifications: NotificationData[];
@@ -36,8 +24,7 @@ interface Data {
 
 export default defineComponent({
     components: {
-        Icon,
-        IconButton,
+        NotificationComponent,
     },
 
     data(): Data {
@@ -61,40 +48,6 @@ export default defineComponent({
 
         removeNotification(index: number): void {
             this.notifications.splice(index, 1);
-        },
-
-        typeClass(notification: NotificationData): string {
-            switch (notification.type) {
-                case NotificationType.Success:
-                    return "success";
-
-                case NotificationType.Warning:
-                    return "warning";
-
-                case NotificationType.Danger:
-                    return "danger";
-
-                case NotificationType.Default:
-                default:
-                    return "default";
-            }
-        },
-
-        notificationTypeIcon(notification: NotificationData): string {
-            switch (notification.type) {
-                case NotificationType.Success:
-                    return "check-circle";
-
-                case NotificationType.Warning:
-                    return "exclamation-triangle";
-
-                case NotificationType.Danger:
-                    return "exclamation-triangle-fill";
-
-                case NotificationType.Default:
-                default:
-                    return "info-circle";
-            }
         },
     },
 

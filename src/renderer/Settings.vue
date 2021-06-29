@@ -17,7 +17,7 @@ import { defineComponent } from "vue";
 import Sidebar from "./Components/SettingsWindow/Sidebar.vue";
 import Notification from "./Components/SettingsWindow/Notification.vue";
 
-import "./Styles/variables.css";
+import "ueli-designsystem/variables.css";
 import "./Styles/shared.css";
 
 export default defineComponent({

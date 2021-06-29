@@ -22,7 +22,7 @@ import { VueEvent } from "./VueEvent";
 import { SearchResultItem } from "../common/SearchResult/SearchResultItem";
 import { IpcChannel } from "../common/IpcChannel";
 
-import "./Styles/variables.css";
+import "ueli-designsystem/variables.css";
 import "./Styles/shared.css";
 
 interface Data {

@@ -1,6 +1,6 @@
 <template>
     <div class="notifications">
-        <NotificationComponent
+        <Notification
             v-for="(notification, index) in notifications"
             :key="index"
             :message="notification.message"
@@ -16,7 +16,7 @@ import { defineComponent } from "vue";
 import { NotificationData } from "../../NotificationData";
 import { VueEvent } from "../../VueEvent";
 import { vueEventEmitter } from "../../VueEventEmitter";
-import { Notification as NotificationComponent } from "ueli-designsystem/index";
+import { Notification } from "ueli-designsystem";
 
 interface Data {
     notifications: NotificationData[];
@@ -24,7 +24,7 @@ interface Data {
 
 export default defineComponent({
     components: {
-        NotificationComponent,
+        Notification,
     },
 
     data(): Data {

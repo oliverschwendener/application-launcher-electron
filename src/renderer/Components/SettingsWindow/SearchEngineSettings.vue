@@ -37,7 +37,7 @@ import { NotificationData } from "../../NotificationData";
 import { NotificationType } from "../../NotificationType";
 import { VueEvent } from "../../VueEvent";
 import { vueEventEmitter } from "../../VueEventEmitter";
-import { NumberInput, SliderInput, Setting, SettingList } from "ueli-designsystem/index";
+import { NumberInput, SliderInput, Setting, SettingList } from "ueli-designsystem";
 
 interface Data {
     settings: Settings;

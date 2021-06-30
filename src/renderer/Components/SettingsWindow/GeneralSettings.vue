@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SettingList from "ueli-designsystem/components/SettingList.vue";
+import { SettingList } from "ueli-designsystem";
 
 export default defineComponent({
     components: {

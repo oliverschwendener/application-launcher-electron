@@ -7,7 +7,7 @@
             <router-view> </router-view>
         </div>
         <div class="notification-container">
-            <Notifications />
+            <Notifier />
         </div>
     </div>
 </template>
@@ -15,7 +15,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Sidebar from "./Components/SettingsWindow/Sidebar.vue";
-import Notifications from "./Components/SettingsWindow/Notifications.vue";
+import Notifier from "./Components/SettingsWindow/Notifier.vue";
 
 import "ueli-designsystem/variables.css";
 import "./Styles/shared.css";
@@ -23,7 +23,7 @@ import "./Styles/shared.css";
 export default defineComponent({
     components: {
         Sidebar,
-        Notifications,
+        Notifier,
     },
 
     methods: {

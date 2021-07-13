@@ -74,5 +74,6 @@ new MainApplication(
     searchEngine,
     executionService,
     locationOpeningService,
-    settingsManager
+    settingsManager,
+    logger
 ).start();

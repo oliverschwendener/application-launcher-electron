@@ -1,6 +1,7 @@
 import { App, GlobalShortcut, IpcMain, IpcMainEvent } from "electron";
 import { IpcMainInvokeEvent } from "electron/main";
 import { IpcChannel } from "../common/IpcChannel";
+import { Logger } from "../common/Logger/Logger";
 import { OperatingSystem } from "../common/OperatingSystem/OperatingSystem";
 import { SearchResultItem } from "../common/SearchResult/SearchResultItem";
 import { Settings } from "../common/Settings";
@@ -25,7 +26,8 @@ export class MainApplication {
         private readonly searchEngine: SearchEngine,
         private readonly executionService: ExecutionService,
         private readonly locationOpeningService: LocationOpeningService,
-        private readonly settingsManager: SettingsManager
+        private readonly settingsManager: SettingsManager,
+        private readonly logger: Logger
     ) {}
 
     public start(): void {
@@ -153,8 +155,13 @@ export class MainApplication {
         return this.searchEngine.rescan();
     }
 
-    private clearCaches(): Promise<void> {
-        return this.searchEngine.clearCaches();
+    private async clearCaches(): Promise<void> {
+        try {
+            await this.searchEngine.clearCaches();
+            this.logger.info("Successfully cleared caches");
+        } catch (error) {
+            this.logger.error(`Failed to clear caches. Reason: ${error}`);
+        }
     }
 
     private handleTrayIconEvent(event: TrayIconEvent): void {

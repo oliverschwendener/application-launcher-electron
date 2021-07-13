@@ -1169,27 +1169,12 @@
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.0-beta.15.tgz#ad7cb384e062f165bcf9c83732125bffbc2ad83d"
   integrity sha512-quBx4Jjpexo6KDiNUGFr/zF/2A4srKM9S9v2uHgMXSU//hjgq1eGzqkIFql8T9gfX5ZaVOUzYBP3jIdIR3PKIA==
 
-"@vue/reactivity@3.0.11":
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.0.11.tgz#07b588349fd05626b17f3500cbef7d4bdb4dbd0b"
-  integrity sha512-SKM3YKxtXHBPMf7yufXeBhCZ4XZDKP9/iXeQSC8bBO3ivBuzAi4aZi0bNoeE2IF2iGfP/AHEt1OU4ARj4ao/Xw==
-  dependencies:
-    "@vue/shared" "3.0.11"
-
 "@vue/reactivity@3.1.4":
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.1.4.tgz#d926ed46fb0d48582ccf8665b062d37b5d35ba99"
   integrity sha512-YDlgii2Cr9yAoKVZFzgY4j0mYlVT73986X3e5SPp6ifqckSEoFSUWXZK2Tb53TB/9qO29BEEbspnKD3m3wAwkA==
   dependencies:
     "@vue/shared" "3.1.4"
-
-"@vue/runtime-core@3.0.11":
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-core/-/runtime-core-3.0.11.tgz#c52dfc6acf3215493623552c1c2919080c562e44"
-  integrity sha512-87XPNwHfz9JkmOlayBeCCfMh9PT2NBnv795DSbi//C/RaAnc/bGZgECjmkD7oXJ526BZbgk9QZBPdFT8KMxkAg==
-  dependencies:
-    "@vue/reactivity" "3.0.11"
-    "@vue/shared" "3.0.11"
 
 "@vue/runtime-core@3.1.4":
   version "3.1.4"
@@ -1198,15 +1183,6 @@
   dependencies:
     "@vue/reactivity" "3.1.4"
     "@vue/shared" "3.1.4"
-
-"@vue/runtime-dom@3.0.11":
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/-/runtime-dom-3.0.11.tgz#7a552df21907942721feb6961c418e222a699337"
-  integrity sha512-jm3FVQESY3y2hKZ2wlkcmFDDyqaPyU3p1IdAX92zTNeCH7I8zZ37PtlE1b9NlCtzV53WjB4TZAYh9yDCMIEumA==
-  dependencies:
-    "@vue/runtime-core" "3.0.11"
-    "@vue/shared" "3.0.11"
-    csstype "^2.6.8"
 
 "@vue/runtime-dom@3.1.4":
   version "3.1.4"
@@ -5257,10 +5233,10 @@ typescript@^4.3.4:
 
 "ueli-designsystem@https://github.com/oliverschwendener/ueli-designsystem":
   version "0.0.0"
-  resolved "https://github.com/oliverschwendener/ueli-designsystem#34d9edf6e3a225d1d2e4b40490a45f2b818ffc68"
+  resolved "https://github.com/oliverschwendener/ueli-designsystem#cfaac44b3f78d90d6ec2f43b502a79812e258de7"
   dependencies:
     bootstrap-icons "^1.5.0"
-    vue "^3.0.11"
+    vue "^3.1.4"
 
 unique-string@^2.0.0:
   version "2.0.0"
@@ -5373,15 +5349,6 @@ vue-router@^4.0.10:
   integrity sha512-YbPf6QnZpyyWfnk7CUt2Bme+vo7TLfg1nGZNkvYqKYh4vLaFw6Gn8bPGdmt5m4qrGnKoXLqc4htAsd3dIukICA==
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.14"
-
-vue@^3.0.11:
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.11.tgz#c82f9594cbf4dcc869241d4c8dd3e08d9a8f4b5f"
-  integrity sha512-3/eUi4InQz8MPzruHYSTQPxtM3LdZ1/S/BvaU021zBnZi0laRUyH6pfuE4wtUeLvI8wmUNwj5wrZFvbHUXL9dw==
-  dependencies:
-    "@vue/compiler-dom" "3.0.11"
-    "@vue/runtime-dom" "3.0.11"
-    "@vue/shared" "3.0.11"
 
 vue@^3.1.4:
   version "3.1.4"

@@ -8,6 +8,10 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         {
+            path: "/",
+            component: GeneralSettings,
+        },
+        {
             path: "/general",
             component: GeneralSettings,
         },
